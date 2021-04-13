@@ -1,33 +1,34 @@
-from itertools import groupby
-
-
 def substrCount(n: int, s: str) -> int:
     """
     :param n: the length of string s
     :param s: a string
     :return: the number of special substrings
     """
-    pass
+    line = []
+    count = 0
+    current = None
 
+    for i in range(n):
+        if s[i] == current:
+            count += 1
+        else:
+            if current is not None:
+                line.append((current, count))
+            current = s[i]
+            count = 1
 
-# def k_sum(k):
-#     return (k*(k+1))//2
-#
-#
-# def substrCount(n, s):
-#     case_a = 0
-#     case_b = 0
-#     for x,y in groupby(s):
-#         case_a += k_sum(sum(1 for i in y))
-#     for i in range(1,len(s)-1):
-#         skip = 1
-#         if s[i-skip] == s[i] or s[i+skip] == s[i]:
-#             continue
-#         match = s[i-skip]
-#         while i-skip>-1 and i+skip<len(s) and s[i-skip]==match and s[i+skip]==match:
-#             case_b += 1
-#             skip += 1
-#     return case_a + case_b
+    line.append((current, count))
+
+    substr_count = 0
+
+    for substr in line:
+        substr_count += (substr[1] * (substr[1] + 1)) // 2
+
+    for i in range(1, len(line) - 1):
+        if line[i - 1][0] == line[i + 1][0] and line[i][1] == 1:
+            substr_count += min(line[i - 1][1], line[i + 1][1])
+
+    return substr_count
 
 
 if __name__ == '__main__':
